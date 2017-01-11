@@ -1,0 +1,64 @@
+'-------------------------------------------------------------------------------------------------
+'-------------------------------- LCD Capture Demo -----------------------------------------------
+'-------------------------------------------------------------------------------------------------
+'
+' This demo captures LCD and convert it into a bit map image which can be display on the browser.
+'
+' A BMP file is used to fill the screen of the LCD, in this demo we use the file tibbo_more.bmp
+' This step is not "necessary" as the functions to capture and translate the screen capture
+' into a BMP file read directly off the LCD screen.
+'
+' The demo support all three currently supported LCDs (TEV-LB0/LB1/LB2) and the output BMP
+' will output colors according to the screen.
+'
+' To test the demo, open up your internet browser and type in the IP address + index.html of the 
+' device "default set to 192.168.1.198" and 1:1 screen capture of the LCD will be shown. 
+'  (ex. 192.168.1.198/index.html)
+'
+' There are a few settings to note:
+'
+'   - boot.tbs > sub boot > sock.urlsubsitutes : change this if you wish to use different file name
+'   - choose the appropriate LCD by selecting : Project > Settings > Customize > Panel Type
+'   - If a new panel is selected, please select : Project > Rebuild All 
+'   - cap_lcd.tbs contains the core of the screen capture functions
+' 
+' Brief explaination on how it works:
+'
+'   We desinged the demo in mind that a lot of our customers which are designing their product with 
+'   LCD support will need to have images of the screens in their manual.  This becomes a problem
+'   when they need to rely on images taken from cameras.  We have developed this demo to show how
+'   screen shots can be extracted to a browser and be saved in pixel-perfect manner.
+'
+'   An interesting part of this demo is the use of the sock.urlsubstutes.
+'   The web server of our devices does not support the full array of file types to be included in
+'   the HTML pages.  To circumvent this problem, and to minimize the amount of memory it takes up
+'   we have designed the system to use a "replace" method which not only provided the ability to
+'   include all types of files but also allows you to construct your own unique files types.
+'
+'   The way it works is that the file you wish to include is replaced by a HTML page of the same 
+'   name. 
+'
+'     ex. if you wish to include a flash animation called "intro.swf", you would still include 
+'         this in your HTML page, but you will also create a file called intro.html.  You also 
+'         define under the sock.urlsubstutes = "intro.swf".  The internal browser when loading the
+'         intro.swf file will check the sock.urlsubstutes property and substute the file with the
+'         intro.html file.
+'
+' We hope that this demo will be both educational and helpful.  Enjoy!
+'
+'-------------------------------------------------------------------------------------------------
+' Janurary 5, 2009 released
+'-------------------------------------------------------------------------------------------------
+
+include "global.tbh"
+
+sub on_sys_init()
+
+	boot
+	'-------load demo bmp file------------------------
+	lcd_clear_screen
+	romfile.open("tibbo_more.bmp")
+	lcd.bmp(romfile.offset,0,0,0,0,lcd.width,lcd.height)
+
+	
+end sub

@@ -1,0 +1,10 @@
+enum lcd_message_type
+	LCD_MESSAGE_FULL_HEIGHT,
+	LCD_MESSAGE_WITH_SELECTION
+end enum
+
+const LCD_LEGEND_AREA_HEIGHT=9
+
+declare sub lcd_set_contrast(level as byte)
+declare sub lcd_message(byref str as string,alignment as pl_lcd_text_alignment,message_type as lcd_message_type)
+declare sub lcd_clear_screen

@@ -1,0 +1,114 @@
+include "global.tbh"
+
+'============================================================================
+sub boot
+	'----- SETUP NET -----
+
+	dim f as byte
+
+	for f=0 to 7
+		sock.num=f
+		sock.txbuffrq(6)
+		sock.rxbuffrq(1) 
+		sock.varbuffrq(1)
+	next f
+	
+	sys.buffalloc
+	
+	for f=0 to 7
+		sock.num=f
+		sock.protocol=PL_SOCK_PROTOCOL_TCP
+		sock.localportlist="23"
+		sock.httpportlist="80"
+		sock.connectiontout=10
+		sock.inconmode= PL_SOCK_INCONMODE_ANY_IP_ANY_PORT
+		sock.reconmode= PL_SOCK_RECONMODE_0
+	next f
+	
+	sock.urlsubstitutes = "bmpfile.bmp"
+	net.ip = "192.168.1.198"
+
+	'----- SETUP LCD PANEL -----
+
+#if LCD_TYPE=SAMSUNG_S6B0108
+
+	lcd.iomapping="44,46,40,41,43,42,4" 'RST,EN,CS1,CS2,DI,RW,data_bus
+	
+	io.num=PL_IO_NUM_46 'EN
+	io.enabled=YES
+	
+	io.num=PL_IO_NUM_44 'RST
+	io.enabled=YES
+
+	io.num=PL_IO_NUM_40 'CS1
+	io.enabled=YES
+
+	io.num=PL_IO_NUM_41 'CS2
+	io.enabled=YES
+
+	io.num=PL_IO_NUM_42 'R/-W
+	io.enabled=YES
+
+	io.num=PL_IO_NUM_43 'D/-I
+	io.enabled=YES
+
+	lcd.width=128
+	lcd.height=64
+	lcd.enabled=YES
+	lcd_set_contrast(11)
+
+#elif LCD_TYPE=HIMAX_HX8309
+
+	io.num=PL_IO_NUM_47
+	io.enabled=YES
+	io.state=HIGH
+
+	lcd.iomapping="44,43,42,41,40,4" 'RST,DC,WR,RD,CS,data_bus
+	
+	io.num=PL_IO_NUM_40 'RST
+	io.enabled=YES
+	
+	io.num=PL_IO_NUM_41 'DC
+	io.enabled=YES
+
+	io.num=PL_IO_NUM_42 'WR
+	io.enabled=YES
+
+	io.num=PL_IO_NUM_43 'RD
+	io.enabled=YES
+
+	io.num=PL_IO_NUM_44 'CS
+	io.enabled=YES
+
+	lcd.width=176
+	lcd.height=220
+	lcd.enabled=YES
+
+#else
+
+	lcd.iomapping="44,43,42,41,40,4" 'RST,DC,WR,RD,CS,data_bus
+	
+	io.num=PL_IO_NUM_40 'RST
+	io.enabled=YES
+	
+	io.num=PL_IO_NUM_41 'DC
+	io.enabled=YES
+
+	io.num=PL_IO_NUM_42 'WR
+	io.enabled=YES
+
+	io.num=PL_IO_NUM_43 'RD
+	io.enabled=YES
+
+	io.num=PL_IO_NUM_44 'CS
+	io.enabled=YES
+
+	lcd.width=128
+	lcd.height=96
+	lcd.enabled=YES
+#endif
+
+	romfile.open("Tibbo-5x7(V).bin")
+	lcd.setfont(romfile.offset)
+
+end sub

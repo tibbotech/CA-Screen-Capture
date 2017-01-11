@@ -1,0 +1,47 @@
+include "global.tbh"
+
+'============================================================================
+sub lcd_set_contrast(level as byte)
+'Contrast control shares the data bus with the LCD. Initialize LCD first,
+'then set the contrast (before LCD initialization the bus may be driven
+'by the LCD)
+
+	'enable port, output data
+	io.portnum=PL_IO_PORT_NUM_4
+	io.portenabled=255
+	io.portstate=level
+	
+	'generate strobe for the data register (on the LCD PCB)
+	io.num=PL_IO_NUM_48
+	io.enabled=YES
+	io.state=HIGH
+	io.state=LOW
+	
+	'disable port
+	io.portenabled=0
+end sub
+
+'============================================================================
+sub lcd_message(byref str as string,alignment as pl_lcd_text_alignment,message_type as lcd_message_type)
+	dim height as word
+
+	lcd.textalignment=alignment
+	lcd.textverticalspacing=2
+	lcd_clear_screen
+	
+	if message_type=LCD_MESSAGE_FULL_HEIGHT then
+		height=lcd.height
+	else
+		height=lcd.height-LCD_LEGEND_AREA_HEIGHT	
+	end if
+	
+	lcd.printaligned(str,0,0,lcd.width,height)
+	beep.play("B-**",PL_BEEP_CANINT)
+end sub
+
+'============================================================================
+sub lcd_clear_screen	' reset the backcolor to black and clear all content
+	lcd.forecolor=0
+	lcd.fill(0,0,lcd.width,lcd.height)
+	lcd.forecolor=65535
+end sub
