@@ -1,5 +1,9 @@
-# CA-Screen-Capture
+# Screen Capture Library
 
-To download the most recent project without installing GIT, please press the green "Clone or Download" button and select "Download ZIP".
+This project produces screen captures of what is currently on the LCD and display it on the web page. This is useful when creating the user manual for a new product. It obviates the need to take (and post-process) photos of the display.
 
-For more detail about this project, please visit <a href="http://tibbo.com/programmable/applications/examples/screen_capture.html" target="_blank">Project Description Page</a>
+The project works by trasnferring the information obtained from the lcd.getpixel method into a bitmap string, which is generated when the web page is loaded. Another interesting technique to note is the use of the sock.urlsubstitutes property. Since we are generating the BMP file on the fly, we did not actually include a file called "enlarge.bmp".
+
+- The code supports TEV-LB0, TEV-LB1 and TEV-LB2.
+- Remember to rebuild the project when you change the LCD selected or else it might not work properly
+- The main functions that deal with the screen capture are in cap_lcd.tbs
